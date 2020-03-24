@@ -4,7 +4,9 @@ from discord.ext import commands
 import asyncio
 from itertools import cycle
 
-TOKEN = 'NTQxODMwOTA2ODQ4MjE1MDUy.DzlLeA.ETQpoGiQTXrWUoqgA2VsZBiRMrw'
+fileStream = open("TOKEN.txt", "r")
+TOKEN = fileStream.readline()
+fileStream.close()
 
 client = commands.Bot(command_prefix = '8')
 client.remove_command('help')
