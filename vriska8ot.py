@@ -1,6 +1,7 @@
 # Work with Python 3.6
 import discord
 from discord.ext import commands
+from discord.utils import get
 import asyncio
 from itertools import cycle
 
@@ -13,8 +14,6 @@ bot.remove_command('help')
 
 @bot.event
 async def on_message(message):
-    # we do not want the bot to reply to itself
-
     author = message.author
     content = message.content
     channel = message.channel
@@ -25,24 +24,24 @@ async def on_message(message):
 
     await bot.process_commands(message)
 
-    if message.content.startswith('8hello'):
+    if content.startswith('8hello'):
         msg = 'Hello, {0.author.mention}!!!!!!!!'.format(message)
-        await bot.send_message(message.channel, msg)
+        await channel.send(msg)
         return
 
-    if message.content.startswith('this is so sad vriska8ot play oh no'):
+    if content.startswith('this is so sad vriska8ot play oh no'):
         msg = 'https://www.youtube.com/watch?v=uClcSaX0cj8'.format(message)
-        await bot.send_message(message.channel, msg)
+        await channel.send(msg)
         return
 
-    if message.content.startswith('8say'):
-        msg = message.content.split()
+    if content.startswith('8say'):
+        msg = content.split()
         output = ''
         for word in msg[1:]:
             output += word
             output += ' '    
-        await bot.send_message(channel, output)
-        await bot.delete_message(message)
+        await channel.send(output)
+        await message.delete()
 
 @bot.command(pass_context=True)
 async def help(ctx):
@@ -55,19 +54,14 @@ async def help(ctx):
     embed.add_field(name='8hello', value='Say hello to me', inline=False)
     embed.add_field(name='8say', value='Have me mimic you', inline=False)
     embed.set_footer(text='ᴬ ᶜᵉʳᵗᶦᶠᶦᵉᵈ ᴸᶦˡ ᶜᵒʲᶦ ᴾʳᵒᵈᵘᶜᵗ')
-    await bot.send_message(channel, embed=embed)
+    await channel.send(embed=embed) 
 
 @bot.command(pass_context=True)
-async def join(ctx):
-    channel = ctx.message.author.voice.voice_channel
-    await bot.join_voice_channel(channel)
+async def spider(ctx):
+    channel = ctx.message.channel
+    await channel.send(file=discord.File('media/Vriska_Serket.png'))
 
-@bot.command(pass_context=True)
-async def leave(ctx):
-    server = ctx.message.server
-    voice_bot = bot.voice_bot_in(server)
-    await voice_bot.disconnect()   
-    
+#currently broken
 @bot.event
 async def on_message_delete(message):
     if message.content.startswith('8say'):
@@ -76,12 +70,13 @@ async def on_message_delete(message):
     if message.author == bot.user:
         return
     else:
-        await bot.send_message(message.channel, 'Who deleted {}\'s message? It said: {}'.format(message.author.mention, message.content))
+        channel = message.channel
+        await channel.send('Who deleted {}\'s message? It said: {}'.format(message.author.mention, message.content))
         return
 
 @bot.event
 async def on_ready():
-    await bot.change_presence(game=discord.Game(name='with John\'s heart'))
+    await bot.change_presence(status=discord.Status.do_not_disturb, activity=discord.Game(name='with John\'s heart'))
     print('Logged in as')
     print(bot.user.name)
     print(bot.user.id)
