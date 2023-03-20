@@ -1,17 +1,17 @@
 {
   "name": "vriska8ot",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "vriska based discord bot:)",
-  "main": "vriska8ot.js",
+  "main": "index.js",
   "dependencies": {
     "@discordjs/rest": "0.1.0-canary.0",
     "discord-api-types": "^0.22.0",
-    "discord.js": "^13.1.0",
+    "discord.js": "14.8",
     "dotenv": "^10.0.0",
     "nodemon": "^2.0.12"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node deploy-commands.js && node index.js"
   },
   "repository": {
     "type": "git",
